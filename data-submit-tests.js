@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import { Tinytest } from 'meteor/tinytest';
 import { splitData } from './lib/helpers/splitData.js';
 import { filesToBuffer } from './lib/helpers/filesToBuffer.js';
@@ -27,28 +26,44 @@ Tinytest.add('helpers - splitData - returns a correct object', (test) => {
 });
 
 Tinytest.add('helpers - splitData - returns only indexes with an empty file list', (test) => {
-  const inputFile = $('<input type="file" />');
+  const files = Object.create(FileList.prototype, {
+    length: { value: 0 },
+  });
 
-  const res = splitData([
-    inputFile[0].files,
-  ]);
+  const res = splitData([files]);
 
   test.equal(res.files.list.length, 0);
   test.equal(res.files.indexes.length, 1);
 });
 
 Tinytest.add('helpers - splitData - files and values length = data length', (test) => {
-  const inputFile = $('<input type="file" />');
+  const files = Object.create(FileList.prototype, {
+    length: { value: 1 },
+    0: { value: Object.create(File.prototype) },
+  });
 
   const data = [
     { a: 1 },
-    inputFile[0].files,
+    files,
     'b',
   ];
 
   const res = splitData(data);
 
   test.equal(res.files.indexes.length + res.values.length, data.length);
+});
+
+Tinytest.add('helpers - splitData - one file instead of a file list works', (test) => {
+  const data = [
+    { a: 1 },
+    Object.create(File.prototype),
+    'b',
+  ];
+
+  const res = splitData(data);
+
+  test.equal(res.files.list.length, 1);
+  test.equal(res.files.indexes.length, 1);
 });
 
 // tests: helpers - filesToBuffer

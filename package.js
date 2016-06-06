@@ -2,7 +2,7 @@
 
 Package.describe({
   name: 'kporten:data-submit',
-  version: '0.1.0',
+  version: '0.2.0',
   summary: 'Submit your form values and files easily',
   git: 'https://github.com/kporten/meteor-data-submit',
   documentation: 'README.md',
