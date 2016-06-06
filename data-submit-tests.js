@@ -22,35 +22,22 @@ Tinytest.add('helpers - splitData - returns a correct object', (test) => {
   test.instanceOf(res.files, Object);
   test.instanceOf(res.files.list, Array);
   test.instanceOf(res.files.indexes, Array);
+  test.instanceOf(res.files.keys, Array);
   test.instanceOf(res.values, Array);
 });
 
-Tinytest.add('helpers - splitData - returns only indexes with an empty file list', (test) => {
+Tinytest.add('helpers - splitData - returns indexes with an empty file list', (test) => {
   const files = Object.create(FileList.prototype, {
     length: { value: 0 },
   });
 
   const res = splitData([files]);
 
-  test.equal(res.files.list.length, 0);
+  test.equal(res.files.list.length, 1);
   test.equal(res.files.indexes.length, 1);
-});
-
-Tinytest.add('helpers - splitData - files and values length = data length', (test) => {
-  const files = Object.create(FileList.prototype, {
-    length: { value: 1 },
-    0: { value: Object.create(File.prototype) },
-  });
-
-  const data = [
-    { a: 1 },
-    files,
-    'b',
-  ];
-
-  const res = splitData(data);
-
-  test.equal(res.files.indexes.length + res.values.length, data.length);
+  test.equal(res.files.keys.length, 1);
+  test.equal(res.files.list[0], null);
+  test.equal(res.files.indexes[0], 0);
 });
 
 Tinytest.add('helpers - splitData - one file instead of a file list works', (test) => {
@@ -64,6 +51,22 @@ Tinytest.add('helpers - splitData - one file instead of a file list works', (tes
 
   test.equal(res.files.list.length, 1);
   test.equal(res.files.indexes.length, 1);
+  test.equal(res.files.keys.length, 1);
+});
+
+Tinytest.add('helpers - splitData - object with file property works', (test) => {
+  const data = [
+    'a',
+    { x: Object.create(File.prototype) },
+    'b',
+    { y: 123 },
+  ];
+
+  const res = splitData(data);
+
+  test.equal(res.files.list.length, 1);
+  test.equal(res.files.indexes.length, 1);
+  test.equal(res.files.keys.length, 1);
 });
 
 // tests: helpers - filesToBuffer

@@ -126,7 +126,7 @@ DataSubmit.call(
       * Required method call configuration. All methods must be defined in your main Meteor app
   * **form data**
     * Description:
-      * Optional method arguments of any type. Arguments of type `FileList` must be top level arguments (see the example)
+      * Optional method arguments of any type. Arguments of type `FileList` must be top level arguments (see the example) or a first level value in an object
   * **method callback**
     * Arguments:
       * err: *Any* (from your `Meteor.methods` definition)
